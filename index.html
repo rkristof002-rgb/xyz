@@ -2,18 +2,35 @@
 <html lang="hu">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>xx.xx.xx</title>
+  <!-- Webfont betöltése (mobil és PC egységes betűtípus) -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@700&display=swap" rel="stylesheet">
   <style>
-    html,body{
-      margin:0;height:100%;background:#000;color:#fff;
-      font-family:'Arial Black', Arial, sans-serif;
-      display:flex;align-items:center;justify-content:center;
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: #000;
+      color: #fff;
+      font-family: 'Roboto Mono', 'Courier New', monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
     }
-    #time{
-      font-size:4rem;
-      letter-spacing:0.1rem;
-      text-align:center;
+    #time {
+      /* Mobilon arányos méret */
+      font-size: 8vw;   /* a szélességhez arányos */
+      letter-spacing: 0.1em;
+      line-height: 1.2;
+      word-break: break-word; /* hosszú szám ne vágódjon le */
+    }
+
+    /* Nagyobb képernyőre fix maximum */
+    @media (min-width: 768px) {
+      #time {
+        font-size: 4rem;
+      }
     }
   </style>
 </head>
@@ -21,9 +38,11 @@
   <div id="time">0:00:00:00:00:00</div>
 
   <script>
-    const start = new Date(2025,9,23,23,18,0);
+    const start = new Date(2025, 9, 23, 23, 18, 0);
     const t = document.getElementById("time");
+
     function pad(n){return String(n).padStart(2,'0');}
+
     function breakdown(from,to){
       let y=to.getFullYear()-from.getFullYear();
       let m=to.getMonth()-from.getMonth();
@@ -31,13 +50,20 @@
       let h=to.getHours()-from.getHours();
       let mi=to.getMinutes()-from.getMinutes();
       let s=to.getSeconds()-from.getSeconds();
-      if(s<0){s+=60;mi--;} if(mi<0){mi+=60;h--;} if(h<0){h+=24;d--;} if(d<0){const pm=new Date(to.getFullYear(),to.getMonth(),0);d+=pm.getDate();m--;} if(m<0){m+=12;y--;} return {y,m,d,h,mi,s};
+      if(s<0){s+=60;mi--;} 
+      if(mi<0){mi+=60;h--;} 
+      if(h<0){h+=24;d--;} 
+      if(d<0){const pm=new Date(to.getFullYear(),to.getMonth(),0);d+=pm.getDate();m--;} 
+      if(m<0){m+=12;y--;} 
+      return {y,m,d,h,mi,s};
     }
+
     function u(){
       const b=breakdown(start,new Date());
       t.textContent=`${b.y}:${pad(b.m)}:${pad(b.d)}:${pad(b.h)}:${pad(b.mi)}:${pad(b.s)}`;
     }
-    setInterval(u,250);
+
+    setInterval(u, 250);
     u();
   </script>
 </body>
